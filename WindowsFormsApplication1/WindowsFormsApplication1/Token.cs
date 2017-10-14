@@ -81,7 +81,7 @@ namespace WindowsFormsApplication1
                         if(dots<2 && i==T.Length) type = Type.constant.ToString();
 
                     }
-                else if (i != T.Length - 2 && Helper.is_two_operator(T[i], T[i + 1]))
+                else if (i <= T.Length - 2 && Helper.is_two_operator(T[i], T[i + 1]))
                 {
 
 
