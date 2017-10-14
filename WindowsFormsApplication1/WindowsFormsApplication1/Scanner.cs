@@ -76,13 +76,12 @@ namespace WindowsFormsApplication1
                 String lex = "";
                 if (source_code[i] == '\n' || source_code[i] == '\r' || source_code[i] == ' ') continue;
                 lex += source_code[i];
-              
+                ++i;
                 while (i < source_code.Length &&( source_code[i] != '\n' && source_code[i] != '\r' && source_code[i] != ' '))
                 {
                     lex += source_code[i];
                     ++i;
                 }
-              
                 tokens.Add(lex);
                 
             }
