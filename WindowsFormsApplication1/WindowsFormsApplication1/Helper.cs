@@ -23,7 +23,7 @@ namespace WindowsFormsApplication1
         public static bool is_one_operator(char c)
         {
             return (c == '!' || c == '@' || c == '#' || c == '$' || c == '%' || c == '^'
-                || c == '&' || c == '(' || c == ')' || c == '~' || c == '>' || c == '<' || c == '=' || c == '=');
+                || c == '&' || c == '(' || c == ')' || c == '~' || c == '>' || c == '<' || c == '=' || c == '='|| c == ';');
         }
 
         public static bool is_two_operator(char c1, char c2)
