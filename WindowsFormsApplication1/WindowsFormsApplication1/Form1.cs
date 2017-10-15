@@ -59,12 +59,29 @@ namespace WindowsFormsApplication1
            
 
             int numberOfElement = compile.tokens.Count();
-           
+
+            DataTable dt = new DataTable();
+            dt.Columns.Add("Lexems");
+            dt.Columns.Add("Type");
+
+            DataTable dt2 = new DataTable();
+            dt2.Columns.Add("Lexems");
+  
+            List<string> Errors = new List<string>();
+            
             for (int i = 0; i < numberOfElement; ++i) {
-                MessageBox.Show(compile.tokens[i].ToString());
-                MessageBox.Show(compile.types[i].ToString());
-               
+               // MessageBox.Show(compile.tokens[i].ToString());
+               // MessageBox.Show(compile.types[i].ToString());
+                if (compile.types[i].ToString() == "Error")
+                {
+                    dt2.Rows.Add(compile.tokens[i].ToString());
+                }
+                else
+                dt.Rows.Add(compile.tokens[i].ToString(), compile.types[i].ToString());
            }
+            dataGridView.DataSource = dt;
+            dgv.DataSource = dt2;
+
         
         }
 
@@ -74,6 +91,11 @@ namespace WindowsFormsApplication1
         }
 
         private void label1_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
         }

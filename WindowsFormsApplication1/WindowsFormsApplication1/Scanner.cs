@@ -22,7 +22,7 @@ namespace WindowsFormsApplication1
         public List<String> scan(String source_code)
         {
 
-               /* for (int i = 0; i < source_code.Length; i++)
+                for (int i = 0; i < source_code.Length; i++)
                 {
                     int cur = i;
                     String lex = "";
@@ -69,9 +69,9 @@ namespace WindowsFormsApplication1
 
                   }
                 return tokens;
-            }*/
+            }
 
-            for (int i = 0; i < source_code.Length; i++)
+           /* for (int i = 0; i < source_code.Length; i++)
             {
                 String lex = "";
                 if (source_code[i] == '\n' || source_code[i] == '\r' || source_code[i] == ' ') continue;
@@ -86,7 +86,7 @@ namespace WindowsFormsApplication1
                 
             }
             return tokens;
-        }
+        }*/
 
     }
 }
