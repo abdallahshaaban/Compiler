@@ -22,8 +22,8 @@ namespace WindowsFormsApplication1
 
         public static bool is_one_operator(char c)
         {
-            return (c == '!' || c == '@' || c == '#' || c == '$' || c == '%' || c == '^'
-                || c == '&' || c == '(' || c == ')' || c == '~' || c == '>' || c == '<' || c == '=' || c == '='|| c == ';');
+            return (c == '{' || c == '}' || c == '/' || c == '*' || c == '-' || c =='+'||c == '!' || c == '@' ||  c == '$' || c == '%' || c == '^'
+              || c == '\'' || c == '"' || c == '[' || c == ']' || c == ',' || c == '&' || c == '(' || c == ')' || c == '~' || c == '>' || c == '<' || c == '=' || c == '='|| c == ';');
         }
 
         public static bool is_two_operator(char c1, char c2)
@@ -31,7 +31,7 @@ namespace WindowsFormsApplication1
             String s = "";
             s += c1;
             s += c2;
-            return (s == "<>" || s == "&&" || s == "||");
+            return (s == "<>" || s == "&&" || s == "||" || s == "==" || s == ":=" || s == "!="||s=="//"||s=="/*" || s == "*/");
         }
 
 

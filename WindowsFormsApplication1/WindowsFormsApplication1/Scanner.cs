@@ -24,6 +24,7 @@ namespace WindowsFormsApplication1
             {
                 int cur = i;
                 String lex = "";
+
                 if (Helper.is_letter(source_code[cur]))
                 {
                     while (cur < source_code.Length && (Helper.is_letter(source_code[cur]) || Helper.is_digit(source_code[cur])))
@@ -51,18 +52,72 @@ namespace WindowsFormsApplication1
                 {
                     lex += source_code[cur];
                     lex += source_code[cur + 1];
-                    i = cur + 1;
+
+                    if (source_code[cur] == '/' && source_code[cur + 1] == '/')
+                    {
+                        cur = cur + 2;
+                        while (cur < source_code.Length && source_code[cur] != '\n')
+                        {
+                            lex += source_code[cur];
+                            ++cur;
+                            //  MessageBox.Show(lex.ToString());
+                        }
+                    }
+                    else if (source_code[cur] == '/' && source_code[cur + 1] == '*')
+                    {
+
+                        cur = cur + 2;
+                        while (cur < source_code.Length-1 && source_code[cur] != '*'&& source_code[cur+1] != '/')
+                        {
+                            lex += source_code[cur];
+                            ++cur;
+                            //  MessageBox.Show(lex.ToString());
+                        }
+
+                        if (cur < source_code.Length - 1 && source_code[cur] == '*' && source_code[cur + 1] == '/') {
+                            lex += source_code[cur];
+                            lex += source_code[cur+1];
+                        }
+
+                    }
+                   // MessageBox.Show(lex.ToString());
+                    i = cur ;
                     tokens.Add(lex);
                 }
                 else if (Helper.is_one_operator(source_code[cur]))
                 {
                     lex += source_code[cur];
+
+
+                    if (source_code[cur] == '"')
+                    {
+
+                        //string tmp ="";
+                        //  tmp += source_code[cur];
+                        ++cur;
+                        while (cur < source_code.Length && source_code[cur] != '"' && source_code[cur] != '\n' && source_code[cur] != ';')
+                        {
+
+                            lex += source_code[cur];
+                            ++cur;
+
+                        }
+                        if (source_code[cur] == '"') lex += source_code[cur];
+                    }
                     i = cur;
                     tokens.Add(lex);
+
                 }
                 else
                 {
-                    continue;
+                    cur = i;
+                    if (source_code[cur] == ' ' || source_code[cur] == '\r' || source_code[cur] == '\n') continue;
+                    //  else tokens.Add(source_code[cur].ToString());
+                    //  MessageBox.Show(source_code.Length.ToString());
+
+                    while (cur < source_code.Length && source_code[cur] != ' ' && source_code[cur] != '\r' && source_code[cur] != '\n') { lex += source_code[cur]; ++cur; }
+                    tokens.Add(lex);
+                    i = cur - 1;
                 }
 
             }
