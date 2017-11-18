@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-public enum Token_Class { Identifier, constant, reservedKeyword, semicolon, loop, two_operator, Operator, program, IF, dataType, Return, end, Else, Elseif, until, repeat, then };
+public enum Token_Class {String, Error,comment,Identifier, constant, reservedKeyword, semicolon, loop, two_operator, Operator, program, IF, dataType, Return, end, Else, Elseif, until, repeat, then };
 
 namespace WindowsFormsApplication1
 {
@@ -81,12 +81,12 @@ namespace WindowsFormsApplication1
 
                     if (T[i] == '/' && T[i + 1] == '/')
                     {
-                        type = "comment";
+                        type = Token_Class.comment.ToString();
                     }else if ( T[i] == '/' && T[i + 1] == '*')
                     {
                         if (T[T.Length - 2] == '*' && T[T.Length - 1] == '/')
-                            type = "comment";
-                        else type = "error";
+                            type = Token_Class.comment.ToString();
+                        else type = Token_Class.Error.ToString();
 
                     }
                     else
@@ -97,10 +97,10 @@ namespace WindowsFormsApplication1
                     //type = Type.Operator.ToString();
                     if (T[i] == '"')
                     {
-                        if (T[T.Length - 1] == '"') type = "string";
+                        if (T[T.Length - 1] == '"') type = Token_Class.String.ToString();
 
                     }
-                    else type = "error";
+                    else type = Token_Class.Error.ToString();
                 }
             }
                 return type;
