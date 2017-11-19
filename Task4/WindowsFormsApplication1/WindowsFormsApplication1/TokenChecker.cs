@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 /*<<<<<<< HEAD
 public enum Token_Class {other,String, Error,comment,Identifier, constant, reservedKeyword, semicolon, loop, two_operator, Operator, program, IF, dataType, Return, end, Else, Elseif, until, repeat, then };
 =======*/
-public enum Token_Class {Epsilon, LeftCurlyBracket , RightCurlyBracket ,comma,RightBracket,LeftBracket,String, Error,comment,Identifier, constant, reservedKeyword, semicolon, loop, two_operator, Operator, program, IF, dataType, Return, end, Else, Elseif, until, repeat, then, Or_Operator, And_Operator, other, GreaterThanOp, NotEqualOp, LessThanOp, IsEqualOp };
+public enum Token_Class { MulOp , AddOp , AssigmentOp, Epsilon, LeftCurlyBracket , RightCurlyBracket ,comma,RightBracket,LeftBracket,String, Error,comment,Identifier, constant, reservedKeyword, semicolon, loop, two_operator, Operator, program, IF, dataType, Return, end, Else, Elseif, until, repeat, then, Or_Operator, And_Operator, other, GreaterThanOp, NotEqualOp, LessThanOp, IsEqualOp };
 //>>>>>>> origin/master
 
 namespace WindowsFormsApplication1
@@ -21,10 +21,10 @@ namespace WindowsFormsApplication1
             Classes.Add("if", Token_Class.IF);
             Classes.Add(";", Token_Class.semicolon);
             Classes.Add("program", Token_Class.program);
-            Classes.Add("+", Token_Class.Operator);
-            Classes.Add("-", Token_Class.Operator);
-            Classes.Add("*", Token_Class.Operator);
-            Classes.Add("/", Token_Class.Operator);
+            Classes.Add("+", Token_Class.AddOp);
+            Classes.Add("-", Token_Class.AddOp);
+            Classes.Add("*", Token_Class.MulOp);
+            Classes.Add("/", Token_Class.MulOp);
             Classes.Add("int", Token_Class.dataType);
             Classes.Add("float", Token_Class.dataType);
             Classes.Add("string", Token_Class.dataType);
@@ -50,6 +50,7 @@ namespace WindowsFormsApplication1
             Classes.Add("{", Token_Class.LeftCurlyBracket);
             Classes.Add("}", Token_Class.RightCurlyBracket);
             Classes.Add("main", Token_Class.reservedKeyword);
+            Classes.Add(":=", Token_Class.AssigmentOp);
         }
         public TokenChecker()
         {

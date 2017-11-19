@@ -18,10 +18,10 @@ namespace WindowsFormsApplication1
         static int i = 0;
         public static Node Parse(List<Token> Tokens)
         {
-            Node root = new Node();
+            Node root;
             LT = Tokens;
             //write your parser code
-
+            root = Program();
             return root;
         }
        
@@ -82,7 +82,7 @@ namespace WindowsFormsApplication1
             return node;
         }
     
-        public static Node identifier() {
+        public static Node Identifiers() {
             Node node = new Node();
             node.token = new Token("identifier", Token_Class.Identifier);
 
@@ -93,15 +93,17 @@ namespace WindowsFormsApplication1
            public static Node Factor() {
             Node node = new Node();
             node.token = new Token("factor", Token_Class.other);
-
-            if (LT[i].token_type == Token_Class.Identifier)
-                node.children.Add(Function_Call());
-            if (LT[i].token_type == Token_Class.String)
-                node.children.Add(String());
-            if (LT[i].token_type == Token_Class.constant)
-                node.children.Add(Number());
-            if (LT[i].lex == '('.ToString())
-                node.children.Add(Expression());
+            if(i<LT.Count)
+            {
+                if (LT[i].token_type == Token_Class.Identifier)
+                    node.children.Add(Function_Call());
+                if (LT[i].token_type == Token_Class.String)
+                    node.children.Add(String());
+                if (LT[i].token_type == Token_Class.constant)
+                    node.children.Add(Number());
+                if (LT[i].lex == '('.ToString())
+                    node.children.Add(Expression());
+            }
             return node;
         }
         public static Node Function_Part() {
@@ -110,11 +112,11 @@ namespace WindowsFormsApplication1
 
             if (LT[i].lex=='('.ToString())
                 node.children.Add(match(Token_Class.Operator));
-            node.children.Add(match(Token_Class.Identifier));
+            node.children.Add(Identifiers());
             while (LT[i].lex == ','.ToString())
             {
                 node.children.Add(match(Token_Class.Operator));
-                node.children.Add(match(Token_Class.Identifier));
+                node.children.Add(Identifiers());
             }
             if (LT[i].lex == ')'.ToString())
                 node.children.Add(match(Token_Class.Operator));
@@ -131,7 +133,7 @@ namespace WindowsFormsApplication1
             Node node = new Node();
             node.token = new Token("term dash", Token_Class.other);
 
-            if (LT[i].lex == '*'.ToString())
+            if (i<LT.Count && LT[i].lex == '*'.ToString())
             {
                 node.children.Add(match(Token_Class.Operator));
                 node.children.Add(Termdash());
@@ -143,9 +145,134 @@ namespace WindowsFormsApplication1
             Node node = new Node();
             node.token = new Token("function call", Token_Class.other);
 
-            node.children.Add(match(Token_Class.Identifier));
+            node.children.Add(Identifiers());
             node.children.Add(Function_Part());
             return node;
+        }
+             public static Node AddOp()
+        {
+            Node node = new Node();
+
+            node.token = new Token("AddOp", Token_Class.AddOp);
+            node.children.Add(match(Token_Class.AddOp));  
+            return node;
+        }
+
+        public static Node MulOp()
+        {
+            Node node = new Node();
+
+            node.token = new Token("MulOp", Token_Class.MulOp);
+            node.children.Add(match(Token_Class.MulOp));
+            return node;
+        }
+
+        public static Node Expression()
+        {
+            Node node = new Node();
+
+            node.token = new Token("Expression", Token_Class.other);
+
+            node.children.Add(Term());
+            node.children.Add(Exp());
+
+            return node;
+        }
+        public static Node Exp()
+        {
+            Node node = new Node();
+
+            node.token = new Token("Expression", Token_Class.other);
+
+            node.children.Add(AddOp());
+            node.children.Add(Term());
+            node.children.Add(Exp());
+
+
+            return node;
+
+        }
+
+        public static Node Assignment_Statement()
+        {
+            Node node = new Node();
+
+            node.token = new Token("Assignment_Statement", Token_Class.other);
+
+            node.children.Add( Identifiers());
+            node.children.Add(match(Token_Class.AssigmentOp));
+            node.children.Add(Expression());
+
+            return node;
+
+        }
+
+        public static Node Datatype()
+        {
+            Node node = new Node();
+
+            node.token = new Token("Datatype", Token_Class.dataType);
+
+            node.children.Add(match(Token_Class.dataType));
+
+            return node;
+        }
+
+        public static Node Declaration_Statement()
+        {
+            Node node = new Node();
+
+            node.token = new Token("Declaration_Statement", Token_Class.other);
+
+            node.children.Add(Datatype());
+            node.children.Add(Identifiers());
+
+            while (LT[i].lex == ','.ToString())
+            {
+                node.children.Add(match(Token_Class.Operator));
+                node.children.Add(Identifiers());
+
+            }
+
+            if (LT[i].lex == ';'.ToString())
+                node.children.Add(match(Token_Class.semicolon));
+
+            else
+            {
+                node.children.Add(match(Token_Class.AssigmentOp));
+                node.children.Add(Expression());
+                node.children.Add(match(Token_Class.semicolon));
+            }
+
+            return node;
+        }
+
+        public static Node Read_Statement()
+        {
+            Node node = new Node();
+
+            node.token = new Token("Declaration_Statement", Token_Class.reservedKeyword);
+
+            node.children.Add(match(Token_Class.reservedKeyword));
+            node.children.Add(Identifiers());
+            node.children.Add(match(Token_Class.semicolon));
+
+            return node;
+           
+        }
+
+        public static Node Write_Statement()
+        {
+            Node node = new Node();
+
+            node.token = new Token("Write_Statement", Token_Class.reservedKeyword);
+
+            node.children.Add(match(Token_Class.reservedKeyword));
+            node.children.Add(Expression());
+            node.children.Add(match(Token_Class.semicolon));
+
+            return node;
+
         }
         //Rabah Gamal
         //18
@@ -354,7 +481,7 @@ namespace WindowsFormsApplication1
         {
             Node nd = new Node();
             nd.token = new Token("FunctionName", Token_Class.other);
-            nd.children.Add(match(Token_Class.Identifier));
+            nd.children.Add(Identifiers());
             return nd;
         }
         //30
@@ -362,8 +489,8 @@ namespace WindowsFormsApplication1
         {
             Node nd = new Node();
             nd.token = new Token("Parameter", Token_Class.other);
-            nd.children.Add(match(Token_Class.dataType));
-            nd.children.Add(match(Token_Class.Identifier));
+            nd.children.Add(Datatype());
+            nd.children.Add(Identifiers());
             return nd;
         }
         //31
@@ -371,7 +498,7 @@ namespace WindowsFormsApplication1
         {
             Node nd = new Node();
             nd.token = new Token("Function_Declaration", Token_Class.other);
-            nd.children.Add(match(Token_Class.dataType));
+            nd.children.Add(Datatype());
             nd.children.Add(FunctionName());
             nd.children.Add(match(Token_Class.LeftBracket));
             nd.children.Add(ParameterList());
@@ -429,7 +556,7 @@ namespace WindowsFormsApplication1
         {
             Node nd = new Node();
             nd.token = new Token("Main_Function", Token_Class.other);
-            nd.children.Add(match(Token_Class.dataType));
+            nd.children.Add(Datatype());
             nd.children.Add(match(Token_Class.reservedKeyword));
             nd.children.Add(match(Token_Class.LeftBracket));
             nd.children.Add(match(Token_Class.RightBracket));
