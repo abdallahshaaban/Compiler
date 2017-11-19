@@ -16,7 +16,7 @@ namespace WindowsFormsApplication1
     {
         public static List<Token> LT;
         static int i = 0;
-        //public SyntaxAnalyser() { LT = new List<Token>(); }
+        //Abdalla Shabban
         public static Node match(Token_Class t) {
             Node match = new Node();
 
@@ -24,11 +24,7 @@ namespace WindowsFormsApplication1
                 match.token = LT[i];
             i++;
             return match;
-            
-           
-        }
-
-         
+        }         
         public static Node Number() {
             Node node = new Node();
             node.token = new Token("Number", Token_Class.other);
@@ -145,7 +141,7 @@ namespace WindowsFormsApplication1
             node.children.Add(Function_Part());
             return node;
         }
-        
+        //Rabah Gamal
         //18
         public static Node Return_Statement()
         {
@@ -161,7 +157,7 @@ namespace WindowsFormsApplication1
         public static Node Condition_Operator()
         {
             Node condition_op = new Node();
-            condition_op.token = new Token("Condition_Operator", Token_Class.Other);
+            condition_op.token = new Token("Condition_Operator", Token_Class.other);
             if (LT[i].token_type == Token_Class.LessThanOp)
                 condition_op.children.Add(match(Token_Class.LessThanOp));
             else if(LT[i].token_type == Token_Class.GreaterThanOp)
@@ -177,7 +173,7 @@ namespace WindowsFormsApplication1
         public static Node Condition_Statement()
         {
             Node condition_statement = new Node();
-            condition_statement.token = new Token("Condition_Statement", Token_Class.Other);
+            condition_statement.token = new Token("Condition_Statement", Token_Class.other);
             condition_statement.children.Add(Condition_Term());
             condition_statement.children.Add(Condition_Statement_2());
             return condition_statement;
@@ -186,7 +182,7 @@ namespace WindowsFormsApplication1
         public static Node Condition_Statement_2()
         {
             Node cond_stmt_2 = new Node();
-            cond_stmt_2.token = new Token("Condition_Statement_2", Token_Class.Other);
+            cond_stmt_2.token = new Token("Condition_Statement_2", Token_Class.other);
             if (LT[i].token_type == Token_Class.Or_Operator)
             {
                 cond_stmt_2.children.Add(OrOp());
@@ -200,7 +196,7 @@ namespace WindowsFormsApplication1
         public static Node Condition_Term()
         {
             Node cond_term = new Node();
-            cond_term.token = new Token("Condition_Term", Token_Class.Other);
+            cond_term.token = new Token("Condition_Term", Token_Class.other);
             cond_term.children.Add(Condition());
             cond_term.children.Add(Condition_Term_2());
             return cond_term;
@@ -209,7 +205,7 @@ namespace WindowsFormsApplication1
         public static Node Condition_Term_2()
         {
             Node cond_term_2 = new Node();
-            cond_term_2.token = new Token("Condition_Term_2", Token_Class.Other);
+            cond_term_2.token = new Token("Condition_Term_2", Token_Class.other);
             if(LT[i].token_type == Token_Class.And_Operator)
             {
                 cond_term_2.children.Add(AndOp());
@@ -223,7 +219,7 @@ namespace WindowsFormsApplication1
         public static Node Condition()
         {
             Node cond = new Node();
-            cond.token = new Token("Condition", Token_Class.Other);
+            cond.token = new Token("Condition", Token_Class.other);
             cond.children.Add(Expression());
             cond.children.Add(Condition_Operator());
             cond.children.Add(Expression());

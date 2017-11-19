@@ -7,3 +7,10 @@ C:\Users\abdallah\Desktop\projects1\Compiler\Task4\WindowsFormsApplication1\Wind
 C:\Users\abdallah\Desktop\projects1\Compiler\Task4\WindowsFormsApplication1\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.csproj.GenerateResource.Cache
 C:\Users\abdallah\Desktop\projects1\Compiler\Task4\WindowsFormsApplication1\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.exe
 C:\Users\abdallah\Desktop\projects1\Compiler\Task4\WindowsFormsApplication1\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.pdb
+C:\Users\Lenovo-PC\Desktop\Compiler\Task4\WindowsFormsApplication1\WindowsFormsApplication1\bin\Debug\WindowsFormsApplication1.exe.config
+C:\Users\Lenovo-PC\Desktop\Compiler\Task4\WindowsFormsApplication1\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.exe
+C:\Users\Lenovo-PC\Desktop\Compiler\Task4\WindowsFormsApplication1\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.pdb
+C:\Users\Lenovo-PC\Desktop\Compiler\Task4\WindowsFormsApplication1\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.csprojResolveAssemblyReference.cache
+C:\Users\Lenovo-PC\Desktop\Compiler\Task4\WindowsFormsApplication1\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Form1.resources
+C:\Users\Lenovo-PC\Desktop\Compiler\Task4\WindowsFormsApplication1\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.Properties.Resources.resources
+C:\Users\Lenovo-PC\Desktop\Compiler\Task4\WindowsFormsApplication1\WindowsFormsApplication1\obj\Debug\WindowsFormsApplication1.csproj.GenerateResource.Cache

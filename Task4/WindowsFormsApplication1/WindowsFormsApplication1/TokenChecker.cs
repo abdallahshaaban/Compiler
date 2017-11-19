@@ -5,11 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-<<<<<<< HEAD
+/*<<<<<<< HEAD
 public enum Token_Class {other,String, Error,comment,Identifier, constant, reservedKeyword, semicolon, loop, two_operator, Operator, program, IF, dataType, Return, end, Else, Elseif, until, repeat, then };
-=======
-public enum Token_Class {String, Error,comment,Identifier, constant, reservedKeyword, semicolon, loop, two_operator, Operator, program, IF, dataType, Return, end, Else, Elseif, until, repeat, then, Or_Operator, And_Operator, Other, GreaterThanOp, NotEqualOp, LessThanOp, IsEqualOp };
->>>>>>> origin/master
+=======*/
+public enum Token_Class {String, Error,comment,Identifier, constant, reservedKeyword, semicolon, loop, two_operator, Operator, program, IF, dataType, Return, end, Else, Elseif, until, repeat, then, Or_Operator, And_Operator, other, GreaterThanOp, NotEqualOp, LessThanOp, IsEqualOp };
+//>>>>>>> origin/master
 
 namespace WindowsFormsApplication1
 {
