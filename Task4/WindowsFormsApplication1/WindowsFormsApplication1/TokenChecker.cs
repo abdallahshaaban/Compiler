@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 /*<<<<<<< HEAD
 public enum Token_Class {other,String, Error,comment,Identifier, constant, reservedKeyword, semicolon, loop, two_operator, Operator, program, IF, dataType, Return, end, Else, Elseif, until, repeat, then };
 =======*/
-public enum Token_Class {String, Error,comment,Identifier, constant, reservedKeyword, semicolon, loop, two_operator, Operator, program, IF, dataType, Return, end, Else, Elseif, until, repeat, then, Or_Operator, And_Operator, other, GreaterThanOp, NotEqualOp, LessThanOp, IsEqualOp };
+public enum Token_Class {Epsilon, LeftCurlyBracket , RightCurlyBracket ,comma,RightBracket,LeftBracket,String, Error,comment,Identifier, constant, reservedKeyword, semicolon, loop, two_operator, Operator, program, IF, dataType, Return, end, Else, Elseif, until, repeat, then, Or_Operator, And_Operator, other, GreaterThanOp, NotEqualOp, LessThanOp, IsEqualOp };
 //>>>>>>> origin/master
 
 namespace WindowsFormsApplication1
@@ -36,7 +36,6 @@ namespace WindowsFormsApplication1
             Classes.Add("<>", Token_Class.NotEqualOp);
             Classes.Add("||", Token_Class.Or_Operator);
             Classes.Add("&&", Token_Class.And_Operator);
-
             Classes.Add("repeat", Token_Class.loop);
             Classes.Add("while", Token_Class.loop);
             Classes.Add("until", Token_Class.loop);
@@ -45,6 +44,12 @@ namespace WindowsFormsApplication1
             Classes.Add("then", Token_Class.then);
             Classes.Add("return", Token_Class.Return);
             Classes.Add("end", Token_Class.end);
+            Classes.Add("(", Token_Class.LeftBracket);
+            Classes.Add(")", Token_Class.RightBracket);
+            Classes.Add(",", Token_Class.comma);
+            Classes.Add("{", Token_Class.LeftCurlyBracket);
+            Classes.Add("}", Token_Class.RightCurlyBracket);
+            Classes.Add("main", Token_Class.reservedKeyword);
         }
         public TokenChecker()
         {

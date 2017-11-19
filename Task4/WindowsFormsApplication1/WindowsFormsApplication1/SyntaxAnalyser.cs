@@ -16,7 +16,16 @@ namespace WindowsFormsApplication1
     {
         public static List<Token> LT;
         static int i = 0;
-        //Abdalla Shabban
+        public static Node Parse(List<Token> Tokens)
+        {
+            Node root = new Node();
+            LT = Tokens;
+            //write your parser code
+
+            return root;
+        }
+       
+         //Abdalla Shabban
         public static Node match(Token_Class t) {
             Node match = new Node();
 
@@ -114,10 +123,8 @@ namespace WindowsFormsApplication1
         public static Node Term() {
             Node node = new Node();
             node.token = new Token("Term", Token_Class.other);
-
             node.children.Add(Factor());
             node.children.Add(Termdash());
-
             return node;
         }
         public static Node Termdash() {
@@ -129,7 +136,6 @@ namespace WindowsFormsApplication1
                 node.children.Add(match(Token_Class.Operator));
                 node.children.Add(Termdash());
             }
-
             return node;
         }
         public static Node Function_Call()
@@ -243,18 +249,208 @@ namespace WindowsFormsApplication1
             or_op.children.Add(match(Token_Class.Or_Operator));
             return or_op;
         }
-        
-        public static Node Parse(List<Token> Tokens)
+        //Abullah Mahmoud
+        //25
+        public static Node If_Statement()
         {
-            Node root = new Node();
-            LT = Tokens;
-            //write your parser code
-
-            return root;
+            Node nd = new Node();
+            nd.token = new Token("If_Statement",Token_Class.IF);
+            nd.children.Add(match(Token_Class.IF));
+            nd.children.Add(Condition_Statement());
+            nd.children.Add(match(Token_Class.then));
+            nd.children.Add(Statements());
+            nd.children.Add(d_If_Statement());
+            return nd;
         }
-
-
-
+        public static Node d_If_Statement()
+        {
+            Node nd = new Node();
+            nd.token = new Token("d_If_Statement",Token_Class.other);
+            if (i < LT.Count && LT[i].token_type == Token_Class.Elseif)
+            {
+                nd.children.Add(Else_If_Statement());
+                nd.children.Add(d_If_Statement());
+            }
+            else
+                nd.children.Add(dd_If_Statement());
+            return nd;
+        }
+        public static Node dd_If_Statement()
+        {
+            Node nd = new Node();
+            nd.token = new Token("dd_If_Statement",Token_Class.other);
+            if (i < LT.Count && LT[i].token_type == Token_Class.Else)
+                nd.children.Add(Else_Statement());
+            nd.children.Add(match(Token_Class.end));
+            return nd;
+        }
+        //26
+        public static Node Else_If_Statement()
+        {
+            Node nd = new Node();
+            nd.token = new Token("Else_If_Statement", Token_Class.Elseif);
+            nd.children.Add(match(Token_Class.Elseif));
+            nd.children.Add(Condition_Statement());
+            nd.children.Add(match(Token_Class.then));
+            nd.children.Add(Statements());
+            return nd;
+        }
+        //27
+        public static Node Else_Statement()
+        {
+            Node nd = new Node();
+            nd.token = new Token("Else_Statement", Token_Class.Else);
+            nd.children.Add(match(Token_Class.Else));
+            nd.children.Add(Statements());
+            return nd;
+        }
+        public static Node Statement()
+        {
+            Node nd = new Node();
+            nd.token = new Token("Statement", Token_Class.other);
+            if (i < LT.Count)
+            {
+                if (LT[i].token_type == Token_Class.Identifier) nd.children.Add(Assignment_Statement());
+                else if (LT[i].token_type == Token_Class.dataType) nd.children.Add(Declaration_Statement());
+                else if (LT[i].token_type == Token_Class.reservedKeyword && LT[i].lex == "write") nd.children.Add(Write_Statement());
+                else if (LT[i].token_type == Token_Class.reservedKeyword && LT[i].lex == "read") nd.children.Add(Read_Statement());
+                else if (LT[i].token_type == Token_Class.Return) nd.children.Add(Return_Statement());
+                else if (LT[i].token_type == Token_Class.IF) nd.children.Add(If_Statement());
+                else if (LT[i].token_type == Token_Class.repeat) nd.children.Add(Repeat_Statement());
+                else if (LT[i].token_type == Token_Class.comment) nd.children.Add(Comment_State());
+            }
+            return nd;
+        }
+        public static Node Statements()
+        {
+            Node nd = new Node();
+            nd.token = new Token("Statements", Token_Class.other);
+            if(i < LT.Count && (LT[i].token_type == Token_Class.Identifier || LT[i].token_type == Token_Class.dataType || LT[i].token_type == Token_Class.reservedKeyword && LT[i].lex == "write"|| LT[i].token_type == Token_Class.reservedKeyword && LT[i].lex == "read" || LT[i].token_type == Token_Class.Return || LT[i].token_type == Token_Class.IF || LT[i].token_type == Token_Class.repeat || LT[i].token_type == Token_Class.comment))
+            {
+                nd.children.Add(Statement());
+                nd.children.Add(Statements());
+            }
+            else
+            {
+                Node child = new Node();
+                child.token = new Token("Epsilon",Token_Class.Epsilon);
+                nd.children.Add(child);
+            }
+            return nd;
+        }
+        //28
+        public static Node Repeat_Statement()
+        {
+            Node nd = new Node();
+            nd.token = new Token("Repeat_Statement", Token_Class.other);
+            nd.children.Add(match(Token_Class.repeat));
+            nd.children.Add(Statements());
+            nd.children.Add(match(Token_Class.until));
+            nd.children.Add(Condition_Statement());
+            return nd;
+        }
+        //29
+        public static Node FunctionName()
+        {
+            Node nd = new Node();
+            nd.token = new Token("FunctionName", Token_Class.other);
+            nd.children.Add(match(Token_Class.Identifier));
+            return nd;
+        }
+        //30
+        public static Node Parameter()
+        {
+            Node nd = new Node();
+            nd.token = new Token("Parameter", Token_Class.other);
+            nd.children.Add(match(Token_Class.dataType));
+            nd.children.Add(match(Token_Class.Identifier));
+            return nd;
+        }
+        //31
+        public static Node Function_Declaration()
+        {
+            Node nd = new Node();
+            nd.token = new Token("Function_Declaration", Token_Class.other);
+            nd.children.Add(match(Token_Class.dataType));
+            nd.children.Add(FunctionName());
+            nd.children.Add(match(Token_Class.LeftBracket));
+            nd.children.Add(ParameterList());
+            nd.children.Add(match(Token_Class.RightBracket));
+            return nd;
+        }
+        public static Node ParameterList()
+        {
+            Node nd = new Node();
+            nd.token = new Token("ParameterList", Token_Class.other);
+            nd.children.Add(Parameter());
+            nd.children.Add(d_ParameterList());
+            return nd;
+        }
+        public static Node d_ParameterList()
+        {
+            Node nd = new Node();
+            nd.token = new Token("d_ParameterList", Token_Class.other);
+            if(i<LT.Count && LT[i].token_type == Token_Class.comma)
+            {
+                nd.children.Add(match(Token_Class.comma));
+                nd.children.Add(Parameter());
+                nd.children.Add(d_ParameterList());
+            }
+            else
+            {
+                Node child = new Node();
+                child.token = new Token("Epsilon", Token_Class.Epsilon);
+                nd.children.Add(child);
+            }
+            return nd;
+        }
+        //32
+        public static Node Function_Body()
+        {
+            Node nd = new Node();
+            nd.token = new Token("Function_Body", Token_Class.other);
+            nd.children.Add(match(Token_Class.LeftCurlyBracket));
+            nd.children.Add(Statements());
+            nd.children.Add(Return_Statement());
+            nd.children.Add(match(Token_Class.RightCurlyBracket));
+            return nd;
+        }
+        //33
+        public static Node Function_Statement()
+        {
+            Node nd = new Node();
+            nd.token = new Token("Function_Statement", Token_Class.other);
+            nd.children.Add(Function_Declaration());
+            nd.children.Add(Function_Body());
+            return nd;
+        }
+        //34
+        public static Node 	Main_Function()
+        {
+            Node nd = new Node();
+            nd.token = new Token("Main_Function", Token_Class.other);
+            nd.children.Add(match(Token_Class.dataType));
+            nd.children.Add(match(Token_Class.reservedKeyword));
+            nd.children.Add(match(Token_Class.LeftBracket));
+            nd.children.Add(match(Token_Class.RightBracket));
+            nd.children.Add(Function_Body());
+            return nd;
+        }
+        //35
+        public static Node Program()
+        {
+            Node nd = new Node();
+            nd.token = new Token("Program", Token_Class.other);
+            if (i + 1 < LT.Count && LT[i].token_type == Token_Class.Identifier)
+            {
+                nd.children.Add(Function_Statement());
+                nd.children.Add(Program());
+            }
+            else
+                nd.children.Add(Main_Function());
+            nd.children.Add(Function_Body());
+            return nd;
+        }
         //use this function to print the parse tree in TreeView Toolbox
         public static TreeNode PrintParseTree(Node root)
         {
