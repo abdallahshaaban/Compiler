@@ -67,20 +67,23 @@ namespace WindowsFormsApplication1
                     {
 
                         cur = cur + 2;
-                        while (cur < source_code.Length-1 && source_code[cur] != '*'&& source_code[cur+1] != '/')
+                        while (cur < source_code.Length - 1 && source_code[cur] != '*' && source_code[cur + 1] != '/')
                         {
                             lex += source_code[cur];
-                            cur+=1;
+                            cur += 1;
                             //  MessageBox.Show(lex.ToString());
                         }
 
-                        if (cur < source_code.Length - 1 && source_code[cur] == '*' && source_code[cur + 1] == '/') {
+                        if (cur < source_code.Length - 1 && source_code[cur] == '*' && source_code[cur + 1] == '/')
+                        {
                             lex += source_code[cur];
-                            lex += source_code[cur+1];
+                            lex += source_code[cur + 1];
                             cur++;
                         }
 
                     }
+                    else
+                        cur++;
                    // MessageBox.Show(lex.ToString());
                     i = cur ;
                     tokens.Add(lex);

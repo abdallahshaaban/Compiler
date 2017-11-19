@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 /*<<<<<<< HEAD
 public enum Token_Class {other,String, Error,comment,Identifier, constant, reservedKeyword, semicolon, loop, two_operator, Operator, program, IF, dataType, Return, end, Else, Elseif, until, repeat, then };
 =======*/
-public enum Token_Class { MulOp , AddOp , AssigmentOp, Epsilon, LeftCurlyBracket , RightCurlyBracket ,comma,RightBracket,LeftBracket,String, Error,comment,Identifier, constant, reservedKeyword, semicolon, loop, two_operator, Operator, program, IF, dataType, Return, end, Else, Elseif, until, repeat, then, Or_Operator, And_Operator, other, GreaterThanOp, NotEqualOp, LessThanOp, IsEqualOp };
+public enum Token_Class {While, MulOp , AddOp , AssigmentOp, Epsilon, LeftCurlyBracket , RightCurlyBracket ,comma,RightBracket,LeftBracket,String, Error,comment,Identifier, constant, reservedKeyword, semicolon, loop, two_operator, Operator, program, IF, dataType, Return, end, Else, Elseif, until, repeat, then, Or_Operator, And_Operator, other, GreaterThanOp, NotEqualOp, LessThanOp, IsEqualOp };
 //>>>>>>> origin/master
 
 namespace WindowsFormsApplication1
@@ -36,9 +36,9 @@ namespace WindowsFormsApplication1
             Classes.Add("<>", Token_Class.NotEqualOp);
             Classes.Add("||", Token_Class.Or_Operator);
             Classes.Add("&&", Token_Class.And_Operator);
-            Classes.Add("repeat", Token_Class.loop);
-            Classes.Add("while", Token_Class.loop);
-            Classes.Add("until", Token_Class.loop);
+            Classes.Add("repeat", Token_Class.repeat);
+            Classes.Add("while", Token_Class.While);
+            Classes.Add("until", Token_Class.until);
             Classes.Add("elseif", Token_Class.Elseif);
             Classes.Add("else", Token_Class.Else);
             Classes.Add("then", Token_Class.then);
