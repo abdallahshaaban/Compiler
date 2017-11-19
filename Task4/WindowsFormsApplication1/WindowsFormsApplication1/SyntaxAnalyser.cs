@@ -31,6 +31,7 @@ namespace WindowsFormsApplication1
          
         public static Node Number() {
             Node node = new Node();
+            node.token = new Token("Number", Token_Class.other);
             node.children.Add(match(Token_Class.constant));
             return node;
         }
@@ -38,7 +39,9 @@ namespace WindowsFormsApplication1
         public static Node Reserver_keyword()
         {
             Node node = new Node();
-            if(LT[i].token_type==Token_Class.reservedKeyword)
+            node.token = new Token("Reserver_keyword", Token_Class.reservedKeyword);
+
+            if (LT[i].token_type==Token_Class.reservedKeyword)
             node.children.Add(match(Token_Class.reservedKeyword));
             if (LT[i].token_type == Token_Class.Else)
                 node.children.Add(match(Token_Class.Else));
@@ -59,12 +62,16 @@ namespace WindowsFormsApplication1
         }
         public static Node String() {
             Node node = new Node();
+            node.token = new Token("string", Token_Class.String);
+
             node.children.Add(match(Token_Class.String));
 
             return node;
         }
         public static Node Comment_State() {
             Node node = new Node();
+            node.token = new Token("comment_state", Token_Class.comment);
+
             node.children.Add(match(Token_Class.comment));
 
             return node;
@@ -72,12 +79,16 @@ namespace WindowsFormsApplication1
     
         public static Node identifier() {
             Node node = new Node();
+            node.token = new Token("identifier", Token_Class.Identifier);
+
             node.children.Add(match(Token_Class.Identifier));
 
             return node;
         }
            public static Node Factor() {
             Node node = new Node();
+            node.token = new Token("factor", Token_Class.other);
+
             if (LT[i].token_type == Token_Class.Identifier)
                 node.children.Add(Function_Call());
             if (LT[i].token_type == Token_Class.String)
@@ -90,6 +101,8 @@ namespace WindowsFormsApplication1
         }
         public static Node Function_Part() {
             Node node = new Node();
+            node.token = new Token("function_part", Token_Class.other);
+
             if (LT[i].lex=='('.ToString())
                 node.children.Add(match(Token_Class.Operator));
             node.children.Add(match(Token_Class.Identifier));
@@ -104,6 +117,8 @@ namespace WindowsFormsApplication1
         }
         public static Node Term() {
             Node node = new Node();
+            node.token = new Token("Term", Token_Class.other);
+
             node.children.Add(Factor());
             node.children.Add(Termdash());
 
@@ -111,6 +126,8 @@ namespace WindowsFormsApplication1
         }
         public static Node Termdash() {
             Node node = new Node();
+            node.token = new Token("term dash", Token_Class.other);
+
             if (LT[i].lex == '*'.ToString())
             {
                 node.children.Add(match(Token_Class.Operator));
@@ -122,6 +139,8 @@ namespace WindowsFormsApplication1
         public static Node Function_Call()
         {
             Node node = new Node();
+            node.token = new Token("function call", Token_Class.other);
+
             node.children.Add(match(Token_Class.Identifier));
             node.children.Add(Function_Part());
             return node;
