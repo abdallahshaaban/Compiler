@@ -145,10 +145,113 @@ namespace WindowsFormsApplication1
             node.children.Add(Function_Part());
             return node;
         }
+        
+        //18
+        public static Node Return_Statement()
+        {
+            Node return_statement = new Node();
+            return_statement.token = new Token("Return_Statement", Token_Class.Return);
+            return_statement.children.Add(match(Token_Class.Return));
+            return_statement.children.Add(Expression());
+            return_statement.children.Add(match(Token_Class.semicolon));
+            return return_statement;
+        }
+
+        //19
+        public static Node Condition_Operator()
+        {
+            Node condition_op = new Node();
+            condition_op.token = new Token("Condition_Operator", Token_Class.Other);
+            if (LT[i].token_type == Token_Class.LessThanOp)
+                condition_op.children.Add(match(Token_Class.LessThanOp));
+            else if(LT[i].token_type == Token_Class.GreaterThanOp)
+                condition_op.children.Add(match(Token_Class.GreaterThanOp));
+            else if (LT[i].token_type == Token_Class.IsEqualOp)
+                condition_op.children.Add(match(Token_Class.IsEqualOp));
+            else if (LT[i].token_type == Token_Class.NotEqualOp)
+                condition_op.children.Add(match(Token_Class.NotEqualOp));
+            return condition_op;
+        }
+
+        //20
+        public static Node Condition_Statement()
+        {
+            Node condition_statement = new Node();
+            condition_statement.token = new Token("Condition_Statement", Token_Class.Other);
+            condition_statement.children.Add(Condition_Term());
+            condition_statement.children.Add(Condition_Statement_2());
+            return condition_statement;
+        }
+
+        public static Node Condition_Statement_2()
+        {
+            Node cond_stmt_2 = new Node();
+            cond_stmt_2.token = new Token("Condition_Statement_2", Token_Class.Other);
+            if (LT[i].token_type == Token_Class.Or_Operator)
+            {
+                cond_stmt_2.children.Add(OrOp());
+                cond_stmt_2.children.Add(Condition_Term());
+                cond_stmt_2.children.Add(Condition_Statement_2());
+            }
+            return cond_stmt_2;
+        }
+
+        //21
+        public static Node Condition_Term()
+        {
+            Node cond_term = new Node();
+            cond_term.token = new Token("Condition_Term", Token_Class.Other);
+            cond_term.children.Add(Condition());
+            cond_term.children.Add(Condition_Term_2());
+            return cond_term;
+        }
+
+        public static Node Condition_Term_2()
+        {
+            Node cond_term_2 = new Node();
+            cond_term_2.token = new Token("Condition_Term_2", Token_Class.Other);
+            if(LT[i].token_type == Token_Class.And_Operator)
+            {
+                cond_term_2.children.Add(AndOp());
+                cond_term_2.children.Add(Condition());
+                cond_term_2.children.Add(Condition_Term_2());
+            }
+            return cond_term_2;
+        }
+
+        //22
+        public static Node Condition()
+        {
+            Node cond = new Node();
+            cond.token = new Token("Condition", Token_Class.Other);
+            cond.children.Add(Expression());
+            cond.children.Add(Condition_Operator());
+            cond.children.Add(Expression());
+            return cond;
+        }
+
+        //23
+        public static Node AndOp()
+        {
+            Node and_op = new Node();
+            and_op.token = new Token("AndOp", Token_Class.And_Operator);
+            and_op.children.Add(match(Token_Class.And_Operator));
+            return and_op;
+        }
+
+        //24
+        public static Node OrOp()
+        {
+            Node or_op = new Node();
+            or_op.token = new Token("OrOp", Token_Class.Or_Operator);
+            or_op.children.Add(match(Token_Class.Or_Operator));
+            return or_op;
+        }
+        
         public static Node Parse(List<Token> Tokens)
         {
             Node root = new Node();
-            
+            LT = Tokens;
             //write your parser code
 
             return root;
