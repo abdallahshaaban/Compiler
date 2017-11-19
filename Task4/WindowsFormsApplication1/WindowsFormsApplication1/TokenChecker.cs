@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-public enum Token_Class {String, Error,comment,Identifier, constant, reservedKeyword, semicolon, loop, two_operator, Operator, program, IF, dataType, Return, end, Else, Elseif, until, repeat, then };
+public enum Token_Class {String, Error,comment,Identifier, constant, reservedKeyword, semicolon, loop, two_operator, Operator, program, IF, dataType, Return, end, Else, Elseif, until, repeat, then, Or_Operator, And_Operator, Other, GreaterThanOp, NotEqualOp, LessThanOp, IsEqualOp };
 
 namespace WindowsFormsApplication1
 {
@@ -26,6 +26,12 @@ namespace WindowsFormsApplication1
             Classes.Add("string", Token_Class.dataType);
             Classes.Add("read", Token_Class.reservedKeyword);
             Classes.Add("write", Token_Class.reservedKeyword);
+            Classes.Add("<", Token_Class.LessThanOp);
+            Classes.Add(">", Token_Class.GreaterThanOp);
+            Classes.Add("=", Token_Class.IsEqualOp);
+            Classes.Add("<>", Token_Class.NotEqualOp);
+            Classes.Add("||", Token_Class.Or_Operator);
+            Classes.Add("&&", Token_Class.And_Operator);
 
             Classes.Add("repeat", Token_Class.loop);
             Classes.Add("while", Token_Class.loop);
