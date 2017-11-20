@@ -12,6 +12,7 @@ namespace WindowsFormsApplication1
 {
     public class Compiler
     {
+
         string sourceCode;
         public Node root;
         public List<string> tokens,types;

@@ -15,9 +15,10 @@ namespace WindowsFormsApplication1
 
 
 
-
+        public static List<int> NewLine = new List<int>();
         public List<String> scan(String source_code)
         {
+            NewLine.Add(-1);
             List<String> tokens = new List<String>();
 
             for (int i = 0; i < source_code.Length; i++)
@@ -115,7 +116,12 @@ namespace WindowsFormsApplication1
                 else
                 {
                     cur = i;
-                    if (source_code[cur] == ' ' || source_code[cur] == '\r' || source_code[cur] == '\n') continue;
+                    if (source_code[cur] == ' ' || source_code[cur] == '\r' || source_code[cur] == '\n')
+                    {
+                        if (source_code[cur] == '\n')
+                            NewLine.Add(tokens.Count-1);
+                            continue;
+                    }
                     //  else tokens.Add(source_code[cur].ToString());
                     //  MessageBox.Show(source_code.Length.ToString());
 
@@ -125,6 +131,7 @@ namespace WindowsFormsApplication1
                 }
 
             }
+            NewLine.Add(tokens.Count-1);
             return tokens;
         }
 

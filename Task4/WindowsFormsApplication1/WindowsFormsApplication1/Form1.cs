@@ -41,6 +41,8 @@ namespace WindowsFormsApplication1
 
         private void button1_Click(object sender, EventArgs e)
         {
+            SyntaxAnalyser.ErrorList.Clear();
+            Scanner.NewLine.Clear();
             // just for test 
             // you shoud display two lists (compile.tokens ,compile.types)
             string code = JaconCode.Text;
@@ -72,6 +74,13 @@ namespace WindowsFormsApplication1
             dgv.DataSource = dt2;
             // Parsing Process 
             treeView1.Nodes.Add(SyntaxAnalyser.PrintParseTree(compile.root));
+            DataTable ParserErrors = new DataTable();
+            ParserErrors.Columns.Add("Line");
+            for (int i=0; i<SyntaxAnalyser.ErrorList.Count; i++)
+            {
+                ParserErrors.Rows.Add(SyntaxAnalyser.ErrorList[i]);
+            }
+            dataGridView1.DataSource = ParserErrors;
         }
     }
 }
