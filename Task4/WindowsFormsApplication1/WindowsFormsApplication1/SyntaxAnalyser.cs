@@ -54,6 +54,7 @@ namespace WindowsFormsApplication1
             {
                 ErrorLine += LT[a].lex + " ";
             }
+            if(!ErrorList.Contains(ErrorLine))
             ErrorList.Add(ErrorLine);
         }
         public static Node Number() {
@@ -159,6 +160,7 @@ namespace WindowsFormsApplication1
                 if (LT[i].lex == '('.ToString())
                 {
                     node.children.Add(match(Token_Class.LeftBracket));
+                    if(i<LT.Count && LT[i].token_type != Token_Class.RightBracket)
                     node.children.Add(Identifiers());
                 }
                 else GetError();
@@ -583,7 +585,12 @@ namespace WindowsFormsApplication1
                 nd.token = new Token("Statement", Token_Class.other);
                 if (i < LT.Count)
                 {
-                    if (LT[i].token_type == Token_Class.Identifier) nd.children.Add(Assignment_Statement());
+                    if (LT[i].token_type == Token_Class.Identifier && i + 1 < LT.Count && LT[i + 1].token_type == Token_Class.LeftBracket)
+                    {
+                        nd.children.Add(Function_Call());
+                        nd.children.Add(match(Token_Class.semicolon));
+                    }
+                    else if (LT[i].token_type == Token_Class.Identifier) nd.children.Add(Assignment_Statement());
                     else if (LT[i].token_type == Token_Class.dataType) nd.children.Add(Declaration_Statement());
                     else if (LT[i].token_type == Token_Class.reservedKeyword && LT[i].lex == "write") nd.children.Add(Write_Statement());
                     else if (LT[i].token_type == Token_Class.reservedKeyword && LT[i].lex == "read") nd.children.Add(Read_Statement());
@@ -671,11 +678,17 @@ namespace WindowsFormsApplication1
         public static Node ParameterList()
         {
             Node nd = new Node();
-            if (i < LT.Count)
+            if (i < LT.Count && LT[i].token_type == Token_Class.dataType)
             {
                 nd.token = new Token("ParameterList", Token_Class.other);
                 nd.children.Add(Parameter());
                 nd.children.Add(d_ParameterList());
+            }
+            else
+            {
+                Node child = new Node();
+                child.token = new Token("Epsilon", Token_Class.Epsilon);
+                nd.children.Add(child);
             }
             return nd;
         }
