@@ -33,12 +33,14 @@ namespace WindowsFormsApplication1
             if (i < LT.Count)
             {
                 if (i < LT.Count() && LT[i].token_type == t)
+                {
                     match.token = LT[i];
+                    i++;
+                }
                 else
                 {
                     GetError();
                 }
-                i++;
             }
             return match;
         }
@@ -49,12 +51,17 @@ namespace WindowsFormsApplication1
             {
                 j--;
             }
+            if(i == Scanner.NewLine[j - 1] + 1)
+            {
+                j--;
+            }
             string ErrorLine = "";
             for (int a = Scanner.NewLine[j - 1] + 1; a <= Scanner.NewLine[j]; a++)
             {
                 ErrorLine += LT[a].lex + " ";
             }
-            if(!ErrorList.Contains(ErrorLine))
+            i = Scanner.NewLine[j] + 1;
+            if (!ErrorList.Contains(ErrorLine))
             ErrorList.Add(ErrorLine);
         }
         public static Node Number() {
@@ -157,21 +164,21 @@ namespace WindowsFormsApplication1
             {
                 node.token = new Token("function_part", Token_Class.other);
 
-                if (LT[i].lex == '('.ToString())
-                {
+                //if (LT[i].lex == '('.ToString())
+               // {
                     node.children.Add(match(Token_Class.LeftBracket));
                     if(i<LT.Count && LT[i].token_type != Token_Class.RightBracket)
                     node.children.Add(Identifiers());
-                }
-                else GetError();
+              //  }
+               // else GetError();
                 while (LT[i].lex == ','.ToString())
                 {
                     node.children.Add(match(Token_Class.comma));
                     node.children.Add(Identifiers());
                 }
-                if (LT[i].lex == ')'.ToString())
+                //if (LT[i].lex == ')'.ToString())
                     node.children.Add(match(Token_Class.RightBracket));
-                else GetError();
+               // else GetError();
             }
             return node;
         }
@@ -328,9 +335,9 @@ namespace WindowsFormsApplication1
                     }
                 }
 
-                if (LT[i].lex == ';'.ToString())
+                //if (LT[i].lex == ';'.ToString())
                     node.children.Add(match(Token_Class.semicolon));
-                else GetError();
+                //else GetError();
             }
             return node;
         }
