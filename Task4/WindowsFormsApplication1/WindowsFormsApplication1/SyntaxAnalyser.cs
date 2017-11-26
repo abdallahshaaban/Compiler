@@ -32,50 +32,53 @@ namespace WindowsFormsApplication1
         {
 
             Node match = new Node();
-            if (i < LT.Count)
+            if (i < LT.Count() && LT[i].token_type == t)
             {
-                if (i < LT.Count() && LT[i].token_type == t)
+                match.token = LT[i];
+                bing = false;
+                i++;
+            }
+            else
+            {
+                if (i >= LT.Count)
                 {
-                    match.token = LT[i];
-                    bing = false;
-                    i++;
+                    string s = "Some essential lines doesn't exist.";
+                    ErrorList.Add(s);
                 }
-                else
+                else if (!bing)
                 {
-                    if (!bing)
+                    int j = Scanner.NewLine.Count() - 1;
+                    while (!(i <= Scanner.NewLine[j] && i > Scanner.NewLine[j - 1]))
                     {
-                        int j = Scanner.NewLine.Count() - 1;
-                        while (!(i <= Scanner.NewLine[j] && i > Scanner.NewLine[j - 1]))
-                        {
-                            j--;
-                        }
-                        if (i + 1 < LT.Count && LT[i + 1].token_type == t)
-                        {
-                            string s = "Extra ";
-                            s += LT[i].lex;
-                            ErrorList.Add(s);
-                            match.token = LT[i + 1];
-                            i += 2;
-                        }
-                        else if (i == Scanner.NewLine[j - 1] + 1)
-                        {
-                            string s = "Expected ";
-                            s += t.ToString();
-                            s += " here.";
-                            ErrorList.Add(s);
-                            bing = true;
-                        }
-                        else //if (i + 1 < LT.Count && LT[i + 1].token_type != t)
-                        {
-                            string s = "Expected ";
-                            s += t.ToString();
-                            s += " instead of ";
-                            s += LT[i].lex;
-                            ErrorList.Add(s);
-                            i++;
-                        }
+                        j--;
+                    }
+                    if (i + 1 < LT.Count && LT[i + 1].token_type == t)
+                    {
+                        string s = "Extra ";
+                        s += LT[i].lex;
+                        ErrorList.Add(s);
+                        match.token = LT[i + 1];
+                        i += 2;
+                    }
+                    else if (i == Scanner.NewLine[j - 1] + 1)
+                    {
+                        string s = "Expected ";
+                        s += t.ToString();
+                        s += " here.";
+                        ErrorList.Add(s);
+                        bing = true;
+                    }
+                    else //if (i + 1 < LT.Count && LT[i + 1].token_type != t)
+                    {
+                        string s = "Expected ";
+                        s += t.ToString();
+                        s += " instead of ";
+                        s += LT[i].lex;
+                        ErrorList.Add(s);
+                        i++;
                     }
                 }
+
             }
             return match;
         }
