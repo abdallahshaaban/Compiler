@@ -1,0 +1,4 @@
+no return in factorial
+no then in elseif
+semi colon after until x=0
+:= instead of = in "float z=10;"

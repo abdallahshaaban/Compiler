@@ -17,6 +17,7 @@ namespace WindowsFormsApplication1
         public static List<Token> LT;
         static int i = 0;
         public static List<String> ErrorList = new List<string>();
+        static bool bing = false;
         public static Node Parse(List<Token> Tokens)
         {
             Node root;
@@ -25,9 +26,10 @@ namespace WindowsFormsApplication1
             root = Program();
             return root;
         }
-       
-         //Abdalla Shabban
-        public static Node match(Token_Class t) {
+
+        //Abdalla Shabban
+        public static Node match(Token_Class t)
+        {
 
             Node match = new Node();
             if (i < LT.Count)
@@ -35,36 +37,50 @@ namespace WindowsFormsApplication1
                 if (i < LT.Count() && LT[i].token_type == t)
                 {
                     match.token = LT[i];
+                    bing = false;
                     i++;
                 }
                 else
                 {
-                    GetError();
+                    if (!bing)
+                    {
+                        int j = Scanner.NewLine.Count() - 1;
+                        while (!(i <= Scanner.NewLine[j] && i > Scanner.NewLine[j - 1]))
+                        {
+                            j--;
+                        }
+                        if (i + 1 < LT.Count && LT[i + 1].token_type == t)
+                        {
+                            string s = "Extra ";
+                            s += LT[i].lex;
+                            ErrorList.Add(s);
+                            match.token = LT[i + 1];
+                            i += 2;
+                        }
+                        else if (i == Scanner.NewLine[j - 1] + 1)
+                        {
+                            string s = "Expected ";
+                            s += t.ToString();
+                            s += " here.";
+                            ErrorList.Add(s);
+                            bing = true;
+                        }
+                        else //if (i + 1 < LT.Count && LT[i + 1].token_type != t)
+                        {
+                            string s = "Expected ";
+                            s += t.ToString();
+                            s += " instead of ";
+                            s += LT[i].lex;
+                            ErrorList.Add(s);
+                            i++;
+                        }
+                    }
                 }
             }
             return match;
         }
-        static void GetError()
+        public static Node Number()
         {
-            int j = Scanner.NewLine.Count() - 1;
-            while (!(i <= Scanner.NewLine[j] && i > Scanner.NewLine[j - 1]))
-            {
-                j--;
-            }
-            if(i == Scanner.NewLine[j - 1] + 1)
-            {
-                j--;
-            }
-            string ErrorLine = "";
-            for (int a = Scanner.NewLine[j - 1] + 1; a <= Scanner.NewLine[j]; a++)
-            {
-                ErrorLine += LT[a].lex + " ";
-            }
-            i = Scanner.NewLine[j] + 1;
-            if (!ErrorList.Contains(ErrorLine))
-            ErrorList.Add(ErrorLine);
-        }
-        public static Node Number() {
             Node node = new Node();
             if (i < LT.Count)
             {
@@ -97,11 +113,11 @@ namespace WindowsFormsApplication1
                     node.children.Add(match(Token_Class.repeat));
                 else if (LT[i].token_type == Token_Class.until)
                     node.children.Add(match(Token_Class.until));
-                else GetError();
             }
             return node;
         }
-        public static Node String() {
+        public static Node String()
+        {
             Node node = new Node();
             if (i < LT.Count)
             {
@@ -111,7 +127,8 @@ namespace WindowsFormsApplication1
             }
             return node;
         }
-        public static Node Comment_State() {
+        public static Node Comment_State()
+        {
             Node node = new Node();
             if (i < LT.Count)
             {
@@ -121,8 +138,9 @@ namespace WindowsFormsApplication1
             }
             return node;
         }
-    
-        public static Node Identifiers() {
+
+        public static Node Identifiers()
+        {
             Node node = new Node();
             if (i < LT.Count)
             {
@@ -132,7 +150,8 @@ namespace WindowsFormsApplication1
             }
             return node;
         }
-           public static Node Factor() {
+        public static Node Factor()
+        {
             Node node = new Node();
             if (i < LT.Count)
             {
@@ -153,36 +172,35 @@ namespace WindowsFormsApplication1
                         node.children.Add(Expression());
                         node.children.Add(match(Token_Class.RightBracket));
                     }
-                    else GetError();
                 }
             }
             return node;
         }
-        public static Node Function_Part() {
+        public static Node Function_Part()
+        {
             Node node = new Node();
             if (i < LT.Count)
             {
                 node.token = new Token("function_part", Token_Class.other);
 
                 //if (LT[i].lex == '('.ToString())
-               // {
-                    node.children.Add(match(Token_Class.LeftBracket));
-                    if(i<LT.Count && LT[i].token_type != Token_Class.RightBracket)
-                    node.children.Add(Identifiers());
-              //  }
-               // else GetError();
-                while (LT[i].lex == ','.ToString())
+                // {
+                node.children.Add(match(Token_Class.LeftBracket));
+                if (i < LT.Count && LT[i].token_type != Token_Class.RightBracket)
+                    node.children.Add(Expression());
+                //  }
+                while (LT[i].token_type != Token_Class.RightBracket)
                 {
                     node.children.Add(match(Token_Class.comma));
-                    node.children.Add(Identifiers());
+                    node.children.Add(Expression());
                 }
                 //if (LT[i].lex == ')'.ToString())
-                    node.children.Add(match(Token_Class.RightBracket));
-               // else GetError();
+                node.children.Add(match(Token_Class.RightBracket));
             }
             return node;
         }
-        public static Node Term() {
+        public static Node Term()
+        {
             Node node = new Node();
             if (i < LT.Count)
             {
@@ -192,13 +210,14 @@ namespace WindowsFormsApplication1
             }
             return node;
         }
-        public static Node Termdash() {
+        public static Node Termdash()
+        {
             Node node = new Node();
             if (i < LT.Count)
             {
                 node.token = new Token("term dash", Token_Class.other);
 
-                if (i < LT.Count && LT[i].token_type == Token_Class.MulOp)
+                if (i < LT.Count && (LT[i].token_type == Token_Class.MulOp || LT[i].token_type == Token_Class.Error))
                 {
                     node.children.Add(match(Token_Class.MulOp));
                     node.children.Add(Factor());
@@ -226,7 +245,7 @@ namespace WindowsFormsApplication1
             return node;
         }
         //Khor4ed
-             public static Node AddOp()
+        public static Node AddOp()
         {
             Node node = new Node();
             if (i < LT.Count)
@@ -266,7 +285,7 @@ namespace WindowsFormsApplication1
             if (i < LT.Count)
             {
                 node.token = new Token("ExpressionDash", Token_Class.other);
-                if (LT[i].token_type == Token_Class.AddOp)
+                if (LT[i].token_type == Token_Class.AddOp || LT[i].token_type == Token_Class.Error)
                 {
                     node.children.Add(AddOp());
                     node.children.Add(Term());
@@ -319,16 +338,16 @@ namespace WindowsFormsApplication1
 
                 node.children.Add(Datatype());
                 node.children.Add(Identifiers());
-                if (i < LT.Count && LT[i].token_type == Token_Class.AssigmentOp)
+                if (i < LT.Count && (LT[i].token_type != Token_Class.comma && LT[i].token_type != Token_Class.semicolon))
                 {
                     node.children.Add(match(Token_Class.AssigmentOp));
                     node.children.Add(Expression());
                 }
-                while (i < LT.Count && LT[i].lex == ','.ToString())
+                while (i < LT.Count && LT[i].token_type != Token_Class.semicolon)
                 {
                     node.children.Add(match(Token_Class.comma));
                     node.children.Add(Identifiers());
-                    if(i<LT.Count && LT[i].token_type == Token_Class.AssigmentOp)
+                    if (i < LT.Count && (LT[i].token_type != Token_Class.comma && LT[i].token_type != Token_Class.semicolon))
                     {
                         node.children.Add(match(Token_Class.AssigmentOp));
                         node.children.Add(Expression());
@@ -336,8 +355,7 @@ namespace WindowsFormsApplication1
                 }
 
                 //if (LT[i].lex == ';'.ToString())
-                    node.children.Add(match(Token_Class.semicolon));
-                //else GetError();
+                node.children.Add(match(Token_Class.semicolon));
             }
             return node;
         }
@@ -354,7 +372,7 @@ namespace WindowsFormsApplication1
                 node.children.Add(match(Token_Class.semicolon));
             }
             return node;
-           
+
         }
 
         public static Node Write_Statement()
@@ -401,7 +419,6 @@ namespace WindowsFormsApplication1
                     condition_op.children.Add(match(Token_Class.IsEqualOp));
                 else if (LT[i].token_type == Token_Class.NotEqualOp)
                     condition_op.children.Add(match(Token_Class.NotEqualOp));
-                else GetError();
             }
             return condition_op;
         }
@@ -601,11 +618,10 @@ namespace WindowsFormsApplication1
                     else if (LT[i].token_type == Token_Class.dataType) nd.children.Add(Declaration_Statement());
                     else if (LT[i].token_type == Token_Class.reservedKeyword && LT[i].lex == "write") nd.children.Add(Write_Statement());
                     else if (LT[i].token_type == Token_Class.reservedKeyword && LT[i].lex == "read") nd.children.Add(Read_Statement());
-                    //else if (LT[i].token_type == Token_Class.Return) nd.children.Add(Return_Statement());
+                    else if (LT[i].token_type == Token_Class.Return) nd.children.Add(Return_Statement());
                     else if (LT[i].token_type == Token_Class.IF) nd.children.Add(If_Statement());
                     else if (LT[i].token_type == Token_Class.repeat) nd.children.Add(Repeat_Statement());
                     else if (LT[i].token_type == Token_Class.comment) nd.children.Add(Comment_State());
-                    else GetError();
                 }
             }
             return nd;
@@ -616,7 +632,17 @@ namespace WindowsFormsApplication1
             if (i < LT.Count)
             {
                 nd.token = new Token("Statements", Token_Class.other);
-                if (i < LT.Count && (LT[i].token_type == Token_Class.Identifier || LT[i].token_type == Token_Class.dataType || LT[i].token_type == Token_Class.reservedKeyword && LT[i].lex == "write" || LT[i].token_type == Token_Class.reservedKeyword && LT[i].lex == "read" /*|| LT[i].token_type == Token_Class.Return*/ || LT[i].token_type == Token_Class.IF || LT[i].token_type == Token_Class.repeat || LT[i].token_type == Token_Class.comment))
+                bool flag = false;
+                if (LT[i].token_type == Token_Class.Return)
+                {
+                    int j = i + 1;
+                    while (!flag && j < LT.Count && LT[j].token_type != Token_Class.RightCurlyBracket && LT[j].token_type != Token_Class.LeftCurlyBracket)
+                    {
+                        if (LT[j].token_type == Token_Class.Return) flag = true;
+                        j++;
+                    }
+                }
+                if (i < LT.Count && (LT[i].token_type == Token_Class.Identifier || LT[i].token_type == Token_Class.dataType || LT[i].token_type == Token_Class.reservedKeyword && LT[i].lex == "write" || LT[i].token_type == Token_Class.reservedKeyword && LT[i].lex == "read" || (flag && LT[i].token_type == Token_Class.Return) || LT[i].token_type == Token_Class.IF || LT[i].token_type == Token_Class.repeat || LT[i].token_type == Token_Class.comment))
                 {
                     nd.children.Add(Statement());
                     nd.children.Add(Statements());
@@ -747,7 +773,7 @@ namespace WindowsFormsApplication1
             return nd;
         }
         //34
-        public static Node 	Main_Function()
+        public static Node Main_Function()
         {
             Node nd = new Node();
             if (i < LT.Count)
@@ -768,7 +794,7 @@ namespace WindowsFormsApplication1
             if (i < LT.Count)
             {
                 nd.token = new Token("Program", Token_Class.other);
-                if (i + 1 < LT.Count && LT[i+1].token_type == Token_Class.Identifier)
+                if (i + 1 < LT.Count && LT[i + 1].token_type == Token_Class.Identifier)
                 {
                     nd.children.Add(Function_Statement());
                     nd.children.Add(Program());
@@ -783,7 +809,7 @@ namespace WindowsFormsApplication1
         {
             TreeNode tree = new TreeNode("Parse Tree");
             TreeNode treeRoot = PrintTree(root);
-            if(treeRoot != null)
+            if (treeRoot != null)
                 tree.Nodes.Add(treeRoot);
             return tree;
         }
